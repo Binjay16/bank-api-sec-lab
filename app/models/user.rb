@@ -1,21 +1,23 @@
-require "digest"
-
 class User < ApplicationRecord
+  ROLES = %w[customer teller admin].freeze
+
+  has_secure_password
+  has_secure_token :api_token
   has_many :accounts, dependent: :destroy
 
-  before_create :set_token
+  before_validation { self.email = email.to_s.strip.downcase }
 
-  def password=(plain)
-    self.password_digest = Digest::MD5.hexdigest(plain.to_s)
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :role, inclusion: { in: ROLES }
+  validates :password, length: { minimum: 12 }, allow_nil: true
+
+  def admin?
+    role == "admin"
   end
 
-  def authenticate(plain)
-    password_digest == Digest::MD5.hexdigest(plain.to_s)
-  end
-
-  private
-
-  def set_token
-    self.api_token = Digest::MD5.hexdigest("#{email}#{Time.now.to_i}")
+  # The only fields that may ever leave the API. Never serialize the raw record.
+  def public_attributes
+    slice(:id, :name, :email, :role)
   end
 end
