@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 
 module BankApi
   class Application < Rails::Application
-    config.load_defaults 7.2
+    config.load_defaults 8.1
     config.api_only = true
   end
 end

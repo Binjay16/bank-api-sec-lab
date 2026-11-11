@@ -4,7 +4,12 @@ Rails.application.configure do
   config.enable_reloading = false
   config.eager_load = true
   config.consider_all_requests_local = false
-  config.force_ssl = false
-  config.log_level = :debug
+
+  # TLS everywhere (assumes TLS is terminated at a trusted proxy/load balancer).
+  config.assume_ssl = true
+  config.force_ssl  = true
+
+  # No debug logging in production; secrets come from ENV["SECRET_KEY_BASE"] or credentials.
+  config.log_level = :info
   config.active_support.report_deprecations = false
 end
