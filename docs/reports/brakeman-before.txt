@@ -1,0 +1,167 @@
+
+== Brakeman Report ==
+
+Application Path: .
+Rails Version: 7.2.2.1
+Brakeman Version: 8.1.0
+Scan Date: 2026-11-11 23:05:38 +0000
+Duration: 0.128637414 seconds
+Checks Run: BasicAuth, BasicAuthTimingAttack, CSRFTokenForgeryCVE, ContentTag, CookieSerialization, CreateWith, CrossSiteScripting, DefaultRoutes, Deserialize, DetailedExceptions, DigestDoS, DivideByZero, DynamicFinders, EOLRails, EOLRuby, EscapeFunction, Evaluation, Execute, FileAccess, FileDisclosure, FilterSkipping, ForceSSL, ForgerySetting, HeaderDoS, I18nXSS, JRubyXML, JSONEncoding, JSONEntityEscape, JSONParsing, LinkTo, LinkToHref, MailTo, MassAssignment, MimeTypeDoS, ModelAttrAccessible, ModelAttributes, ModelSerialize, NestedAttributes, NestedAttributesBypass, NumberToCurrency, PageCachingCVE, Pathname, PermitAttributes, QuoteTableName, Ransack, Redirect, RegexDoS, Render, RenderDoS, RenderInline, RenderRCE, ResponseSplitting, ReverseTabnabbing, RouteDoS, SQL, SQLCVEs, SSLVerify, SafeBufferManipulation, SanitizeConfigCve, SanitizeMethods, Secrets, SelectTag, SelectVulnerability, Send, SendFile, SessionManipulation, SessionSettings, SimpleFormat, SingleQuotes, SkipBeforeFilter, SprocketsPathTraversal, StripTags, SymbolDoS, SymbolDoSCVE, TemplateInjection, TranslateBug, UnsafeReflection, UnsafeReflectionMethods, UnscopedFind, ValidationRegex, VerbConfusion, WeakHash, WeakRSAKey, WithoutProtection, XMLDoS, YAMLParsing
+
+== Overview ==
+
+Controllers: 8
+Models: 4
+Templates: 0
+Errors: 0
+Security Warnings: 17
+
+== Warning Types ==
+
+Command Injection: 1
+File Access: 1
+Mass Assignment: 1
+Missing Encryption: 1
+Path Traversal: 1
+Redirect: 1
+Remote Code Execution: 1
+SQL Injection: 2
+Unmaintained Dependency: 2
+Unscoped Find: 3
+Weak Hash: 3
+
+== Warnings ==
+
+Confidence: High
+Category: Command Injection
+Check: Execute
+Message: Possible command injection
+Code: system("gzip -c #{Rails.root.join("tmp", "exports").join("account-#{Account.find(params[:account_id]).id}.csv")} > #{Rails.root.join("tmp", "exports")}/#{params[:name]}.csv.gz")
+File: app/controllers/statements_controller.rb
+Line: 19
+
+Confidence: High
+Category: Mass Assignment
+Check: MassAssignment
+Message: Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys
+Code: params.require(:user).permit!
+File: app/controllers/users_controller.rb
+Line: 15
+
+Confidence: High
+Category: Missing Encryption
+Check: ForceSSL
+Message: The application does not force use of HTTPS: `config.force_ssl` is not enabled
+File: config/environments/production.rb
+Line: 7
+
+Confidence: High
+Category: Path Traversal
+Check: Pathname
+Message: Absolute paths in `Pathname#join` cause the entire path to be relative to the absolute path, ignoring any prior values
+Code: Rails.root.join("tmp", "exports", params[:file])
+File: app/controllers/statements_controller.rb
+Line: 24
+
+Confidence: High
+Category: Remote Code Execution
+Check: UnsafeReflection
+Message: Unsafe reflection method `constantize` called on parameter value
+Code: params[:type].constantize
+File: app/controllers/reports_controller.rb
+Line: 3
+
+Confidence: High
+Category: SQL Injection
+Check: SQL
+Message: Possible SQL injection
+Code: Account.where("number = '#{params[:number]}'")
+File: app/controllers/accounts_controller.rb
+Line: 13
+
+Confidence: High
+Category: SQL Injection
+Check: SQL
+Message: Possible SQL injection
+Code: Transfer.where(:from_account_id => current_user.account_ids).where("memo LIKE '%#{params[:q]}%'")
+File: app/controllers/transfers_controller.rb
+Line: 4
+
+Confidence: High
+Category: Unmaintained Dependency
+Check: EOLRuby
+Message: Support for Ruby 3.2 ended on 2026-03-31
+File: Gemfile
+Line: 3
+
+Confidence: High
+Category: Unmaintained Dependency
+Check: EOLRails
+Message: Support for Rails 7.2.2.1 ended on 2026-08-09
+File: Gemfile.lock
+Line: 4
+
+Confidence: Medium
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest(plain.to_s)
+File: app/models/user.rb
+Line: 9
+
+Confidence: Medium
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest(plain.to_s)
+File: app/models/user.rb
+Line: 13
+
+Confidence: Medium
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest("#{email}#{Time.now.to_i}")
+File: app/models/user.rb
+Line: 19
+
+Confidence: Weak
+Category: File Access
+Check: SendFile
+Message: Parameter value used in file name
+Code: send_file(Rails.root.join("tmp", "exports", params[:file]))
+File: app/controllers/statements_controller.rb
+Line: 24
+
+Confidence: Weak
+Category: Redirect
+Check: Redirect
+Message: Possible unprotected redirect
+Code: redirect_to((params[:return_to] or "/"), :allow_other_host => true)
+File: app/controllers/sessions_controller.rb
+Line: 14
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Account#find`
+Code: Account.find(params[:id])
+File: app/controllers/accounts_controller.rb
+Line: 9
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Account#find`
+Code: Account.find(params[:account_id])
+File: app/controllers/statements_controller.rb
+Line: 7
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Account#find`
+Code: Account.find(params[:from_account_id])
+File: app/controllers/transfers_controller.rb
+Line: 9
+

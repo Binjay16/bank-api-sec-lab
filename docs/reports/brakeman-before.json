@@ -1,0 +1,476 @@
+{
+  "scan_info": {
+    "app_path": ".",
+    "rails_version": "7.2.2.1",
+    "security_warnings": 17,
+    "start_time": "2026-11-11 23:05:37 +0000",
+    "end_time": "2026-11-11 23:05:37 +0000",
+    "duration": 0.142943408,
+    "checks_performed": [
+      "BasicAuth",
+      "BasicAuthTimingAttack",
+      "CSRFTokenForgeryCVE",
+      "ContentTag",
+      "CookieSerialization",
+      "CreateWith",
+      "CrossSiteScripting",
+      "DefaultRoutes",
+      "Deserialize",
+      "DetailedExceptions",
+      "DigestDoS",
+      "DivideByZero",
+      "DynamicFinders",
+      "EOLRails",
+      "EOLRuby",
+      "EscapeFunction",
+      "Evaluation",
+      "Execute",
+      "FileAccess",
+      "FileDisclosure",
+      "FilterSkipping",
+      "ForceSSL",
+      "ForgerySetting",
+      "HeaderDoS",
+      "I18nXSS",
+      "JRubyXML",
+      "JSONEncoding",
+      "JSONEntityEscape",
+      "JSONParsing",
+      "LinkTo",
+      "LinkToHref",
+      "MailTo",
+      "MassAssignment",
+      "MimeTypeDoS",
+      "ModelAttrAccessible",
+      "ModelAttributes",
+      "ModelSerialize",
+      "NestedAttributes",
+      "NestedAttributesBypass",
+      "NumberToCurrency",
+      "PageCachingCVE",
+      "Pathname",
+      "PermitAttributes",
+      "QuoteTableName",
+      "Ransack",
+      "Redirect",
+      "RegexDoS",
+      "Render",
+      "RenderDoS",
+      "RenderInline",
+      "RenderRCE",
+      "ResponseSplitting",
+      "ReverseTabnabbing",
+      "RouteDoS",
+      "SQL",
+      "SQLCVEs",
+      "SSLVerify",
+      "SafeBufferManipulation",
+      "SanitizeConfigCve",
+      "SanitizeMethods",
+      "Secrets",
+      "SelectTag",
+      "SelectVulnerability",
+      "Send",
+      "SendFile",
+      "SessionManipulation",
+      "SessionSettings",
+      "SimpleFormat",
+      "SingleQuotes",
+      "SkipBeforeFilter",
+      "SprocketsPathTraversal",
+      "StripTags",
+      "SymbolDoS",
+      "SymbolDoSCVE",
+      "TemplateInjection",
+      "TranslateBug",
+      "UnsafeReflection",
+      "UnsafeReflectionMethods",
+      "UnscopedFind",
+      "ValidationRegex",
+      "VerbConfusion",
+      "WeakHash",
+      "WeakRSAKey",
+      "WithoutProtection",
+      "XMLDoS",
+      "YAMLParsing"
+    ],
+    "number_of_controllers": 8,
+    "number_of_models": 4,
+    "number_of_templates": 0,
+    "ruby_version": "3.2.3",
+    "brakeman_version": "8.1.0"
+  },
+  "warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "10331c730e3e12d417d5fc5be3a9d94fc71ab1cf5cd87cacba538d8c6664390c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/transfers_controller.rb",
+      "line": 4,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Transfer.where(:from_account_id => current_user.account_ids).where(\"memo LIKE '%#{params[:q]}%'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TransfersController",
+        "method": "index"
+      },
+      "user_input": "params[:q]",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ]
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "10827fb6251c84c48de1dd5e4c80afb93b574cc191c9e7640a19c9dfea0d17d4",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Account#find`",
+      "file": "app/controllers/transfers_controller.rb",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Account.find(params[:from_account_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TransfersController",
+        "method": "create"
+      },
+      "user_input": "params[:from_account_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ]
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "165cea5df24834706343502ce168cf004509b9b1104671968455e4c27a3fe9e9",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Account#find`",
+      "file": "app/controllers/accounts_controller.rb",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Account.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AccountsController",
+        "method": "show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ]
+    },
+    {
+      "warning_type": "Weak Hash",
+      "warning_code": 90,
+      "fingerprint": "1b7524c31316e2eec161b2d7270988f39da0386c602f6e57d379519f9fa9d97f",
+      "check_name": "WeakHash",
+      "message": "Weak hashing algorithm used: MD5",
+      "file": "app/models/user.rb",
+      "line": 19,
+      "link": "https://brakemanscanner.org/docs/warning_types/weak_hash/",
+      "code": "Digest::MD5.hexdigest(\"#{email}#{Time.now.to_i}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "User",
+        "method": "set_token"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        328
+      ]
+    },
+    {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 24,
+      "fingerprint": "414b4e59035e095378cd59e25a0df81f584cd79b7673151f29ad12b6e129f3b4",
+      "check_name": "UnsafeReflection",
+      "message": "Unsafe reflection method `constantize` called on parameter value",
+      "file": "app/controllers/reports_controller.rb",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
+      "code": "params[:type].constantize",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ReportsController",
+        "method": "show"
+      },
+      "user_input": "params[:type]",
+      "confidence": "High",
+      "cwe_id": [
+        470
+      ]
+    },
+    {
+      "warning_type": "Weak Hash",
+      "warning_code": 90,
+      "fingerprint": "5ab42b7c6fddb3e3fb57cd6a7194a2136ba7fe0c7fed886ed5a4dfc2b1e19bd9",
+      "check_name": "WeakHash",
+      "message": "Weak hashing algorithm used: MD5",
+      "file": "app/models/user.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/weak_hash/",
+      "code": "Digest::MD5.hexdigest(plain.to_s)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "User",
+        "method": "authenticate"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        328
+      ]
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "6827862a3b0f519d9a3647dc857a7e42fb25edb670407c0268b35a4047954158",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/accounts_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Account.where(\"number = '#{params[:number]}'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AccountsController",
+        "method": "lookup"
+      },
+      "user_input": "params[:number]",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ]
+    },
+    {
+      "warning_type": "Missing Encryption",
+      "warning_code": 109,
+      "fingerprint": "6a26086cd2400fbbfb831b2f8d7291e320bcc2b36984d2abc359e41b3b63212b",
+      "check_name": "ForceSSL",
+      "message": "The application does not force use of HTTPS: `config.force_ssl` is not enabled",
+      "file": "config/environments/production.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/missing_encryption/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        311
+      ]
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "707d74b50cd4697b89553523eda1898f3d7e8732d455ed192debb7a35885f69a",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/controllers/statements_controller.rb",
+      "line": 19,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "system(\"gzip -c #{Rails.root.join(\"tmp\", \"exports\").join(\"account-#{Account.find(params[:account_id]).id}.csv\")} > #{Rails.root.join(\"tmp\", \"exports\")}/#{params[:name]}.csv.gz\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StatementsController",
+        "method": "export"
+      },
+      "user_input": "Account.find(params[:account_id])",
+      "confidence": "High",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 121,
+      "fingerprint": "81776f151be34b9c42a5fc3bec249507a2acd9b64338e6f544a68559976bc5d5",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 3.2 ended on 2026-03-31",
+      "file": "Gemfile",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ]
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "a175b447cac050a6dcf6d0bbc1c024c40d4cc6d7d8862ff7078acaa812b9dee8",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Account#find`",
+      "file": "app/controllers/statements_controller.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Account.find(params[:account_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StatementsController",
+        "method": "export"
+      },
+      "user_input": "params[:account_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "b2f52337cc8671c640fdcd4b18ac444077f0e66b639b4d0f7bd586689b3202ea",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/statements_controller.rb",
+      "line": 24,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(Rails.root.join(\"tmp\", \"exports\", params[:file]))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StatementsController",
+        "method": "download"
+      },
+      "user_input": "params[:file]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "b82672f6da6355719a87f5a539f5663610b3c2d88c6a3e523cdf1c6af8cc28e8",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/users_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:user).permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UsersController",
+        "method": "create"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Path Traversal",
+      "warning_code": 125,
+      "fingerprint": "d5a30b244bfcc1e9d3487b1fb5d79ff08edd9f85766859a8609bef61842c1a38",
+      "check_name": "Pathname",
+      "message": "Absolute paths in `Pathname#join` cause the entire path to be relative to the absolute path, ignoring any prior values",
+      "file": "app/controllers/statements_controller.rb",
+      "line": 24,
+      "link": "https://brakemanscanner.org/docs/warning_types/path_traversal/",
+      "code": "Rails.root.join(\"tmp\", \"exports\", params[:file])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StatementsController",
+        "method": "download"
+      },
+      "user_input": "params[:file]",
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "d6c02ebc5b9a1f0f76575c1dfee2e25ac19574441b7a0b323fd815b797cf1ba2",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/sessions_controller.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to((params[:return_to] or \"/\"), :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SessionsController",
+        "method": "destroy"
+      },
+      "user_input": "params[:return_to]",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 7.2.2.1 ended on 2026-08-09",
+      "file": "Gemfile.lock",
+      "line": 4,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ]
+    },
+    {
+      "warning_type": "Weak Hash",
+      "warning_code": 90,
+      "fingerprint": "fb81dead6853ca393af6b21ee72260e2b893a2f024d98b646461ac439e0dd89c",
+      "check_name": "WeakHash",
+      "message": "Weak hashing algorithm used: MD5",
+      "file": "app/models/user.rb",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/weak_hash/",
+      "code": "Digest::MD5.hexdigest(plain.to_s)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "User",
+        "method": "password="
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        328
+      ]
+    }
+  ],
+  "ignored_warnings": [
+
+  ],
+  "errors": [
+
+  ],
+  "obsolete": [
+
+  ]
+}
